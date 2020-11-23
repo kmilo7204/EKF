@@ -27,7 +27,6 @@ void KalmanFilter::Predict() {
    * Motion prediction 
    */
 
-
   // State transition matrix (Prediction)
   x_ = (F_ * x_);
 
@@ -35,6 +34,10 @@ void KalmanFilter::Predict() {
   
   // Process measurement matrix
   P_ = (F_ * P_ * F_trp) + Q_;
+  /**
+   * Q Matrix is calcualted on FusionEKF with the
+   * process noise as well as the dt.
+   * */
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
@@ -62,7 +65,7 @@ void KalmanFilter::Update(const VectorXd &z) {
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
   /**
-   * DESC: Updates the state by using EKF
+   * Updates the state by using EKF
    */
 
   // Remember we compare the measurement with the predicted state
@@ -80,7 +83,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   float rho_d = ((px * vx) + (py * vy))/ rho; // Rate of change 
   
   // z_pred represents the h(x) function
-  VectorXd z_pred = H_ * x_;
+  VectorXd z_pred = H_ * x_;  // Get the matrix size
   z_pred << rho, phi, rho_d;
 
   // Updating matrices
